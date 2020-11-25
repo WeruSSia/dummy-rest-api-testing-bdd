@@ -73,7 +73,7 @@ public class EmployeeTest {
         Employees employees =
                 given().spec(requestSpecification).when().get("/employees").as(Employees.class);
 
-        assertThat(employees.getData().stream().filter(it->it.getEmployee_name().matches("\\d"))).isEmpty();
+        assertThat(employees.getData().stream().filter(it->it.getEmployee_name().matches(".*\\d.*"))).isEmpty();
     }
 
     @Test
