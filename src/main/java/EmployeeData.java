@@ -1,18 +1,18 @@
 public class EmployeeData {
-    private String id;
+    private int id;
     private String employee_name;
-    private String employee_salary;
-    private String employee_age;
+    private int employee_salary;
+    private int employee_age;
     private String profile_image;
 
     public EmployeeData() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -24,19 +24,19 @@ public class EmployeeData {
         this.employee_name = employee_name;
     }
 
-    public String getEmployee_salary() {
+    public int getEmployee_salary() {
         return employee_salary;
     }
 
-    public void setEmployee_salary(String employee_salary) {
+    public void setEmployee_salary(int employee_salary) {
         this.employee_salary = employee_salary;
     }
 
-    public String getEmployee_age() {
+    public int getEmployee_age() {
         return employee_age;
     }
 
-    public void setEmployee_age(String employee_age) {
+    public void setEmployee_age(int employee_age) {
         this.employee_age = employee_age;
     }
 

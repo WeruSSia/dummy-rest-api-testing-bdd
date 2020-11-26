@@ -1,7 +1,7 @@
 public class NewEmployeeData {
     private String name;
-    private String salary;
-    private String age;
+    private int salary;
+    private int age;
     private int id;
 
     public NewEmployeeData() {
@@ -15,19 +15,19 @@ public class NewEmployeeData {
         this.name = name;
     }
 
-    public String getSalary() {
+    public int getSalary() {
         return salary;
     }
 
-    public void setSalary(String salary) {
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
