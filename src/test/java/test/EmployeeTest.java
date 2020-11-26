@@ -1,7 +1,6 @@
 package test;
 
 import dto.Employee;
-import dto.Employees;
 import dto.NewEmployee;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
@@ -62,27 +61,6 @@ public class EmployeeTest {
     }
 
     @Test
-    public void checkForNegativeAgeValueOfEmployees() {
-        Employees employees = getEmployees();
-
-        assertThat(employees.getData().stream().filter(it -> it.getEmployee_age() < 0)).isEmpty();
-    }
-
-    @Test
-    public void checkForNegativeSalaryValueOfEmployees() {
-        Employees employees = getEmployees();
-
-        assertThat(employees.getData().stream().filter(it -> it.getEmployee_salary() < 0)).isEmpty();
-    }
-
-    @Test
-    public void checkForDigitsInEmployeesNames() {
-        Employees employees = getEmployees();
-
-        assertThat(employees.getData().stream().filter(it -> it.getEmployee_name().matches(".*\\d.*"))).isEmpty();
-    }
-
-    @Test
     public void testCreateNewEmployee() {
         JSONObject newEmployeeData = new JSONObject().
                 put("name", "Adam").
@@ -117,18 +95,6 @@ public class EmployeeTest {
         assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         return employeeByIdResponse.as(Employee.class);
-    }
-
-    private Employees getEmployees(){
-        Response employeesResponse =
-                given().
-                    spec(requestSpecification).
-                when().
-                    get("/employees");
-
-        assertThat(employeesResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        return employeesResponse.as(Employees.class);
     }
 
     private NewEmployee postEmployee(JSONObject newEmployeeData){
