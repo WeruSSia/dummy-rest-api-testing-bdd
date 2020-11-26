@@ -128,6 +128,8 @@ public class EmployeeTest {
                         get("/employee/{id}").
                 as(Employee.class);
 
+        assertThat(createdEmployee.getData()).isNotNull();
+
         SoftAssertions softly = new SoftAssertions();
             softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
             softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
