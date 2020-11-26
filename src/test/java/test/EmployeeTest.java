@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmployeeTest {
 
-    RequestSpecification requestSpecification;
+    private RequestSpecification requestSpecification;
 
     @BeforeClass
     public void createRequestSpecification() {
@@ -39,11 +39,7 @@ public class EmployeeTest {
 
     @Test(dataProvider = "existingEmployees")
     public void checkGetEmployeesByIds(int id, String employeeName, int employeeSalary, int employeeAge, String profileImage) {
-        Response employeeByIdResponse = getEmployeeByIdResponse(id);
-
-        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employee employee = employeeByIdResponse.as(Employee.class);
+        Employee employee = getEmployee(id);
 
         SoftAssertions softly = new SoftAssertions();
             softly.assertThat(employee.getData().getEmployee_name()).isEqualTo(employeeName);
@@ -56,11 +52,7 @@ public class EmployeeTest {
     @Test
     public void checkForEmployeeWithNotExistingId() {
         int notExistingId = 25;
-        Response employeeByIdResponse = getEmployeeByIdResponse(notExistingId);
-
-        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employee employee = employeeByIdResponse.as(Employee.class);
+        Employee employee = getEmployee(notExistingId);
 
         SoftAssertions softly = new SoftAssertions();
             softly.assertThat(employee.getData()).isNull();
@@ -71,33 +63,21 @@ public class EmployeeTest {
 
     @Test
     public void checkForNegativeAgeValueOfEmployees() {
-        Response allEmployeesResponse = getAllEmployeesResponse();
-
-        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employees employees = allEmployeesResponse.as(Employees.class);
+        Employees employees = getEmployees();
 
         assertThat(employees.getData().stream().filter(it -> it.getEmployee_age() < 0)).isEmpty();
     }
 
     @Test
     public void checkForNegativeSalaryValueOfEmployees() {
-        Response allEmployeesResponse = getAllEmployeesResponse();
-
-        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employees employees = allEmployeesResponse.as(Employees.class);
+        Employees employees = getEmployees();
 
         assertThat(employees.getData().stream().filter(it -> it.getEmployee_salary() < 0)).isEmpty();
     }
 
     @Test
     public void checkForDigitsInEmployeesNames() {
-        Response allEmployeesResponse = getAllEmployeesResponse();
-
-        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employees employees = allEmployeesResponse.as(Employees.class);
+        Employees employees = getEmployees();
 
         assertThat(employees.getData().stream().filter(it -> it.getEmployee_name().matches(".*\\d.*"))).isEmpty();
     }
@@ -109,24 +89,11 @@ public class EmployeeTest {
                 put("salary", "5000").
                 put("age", "40");
 
-        Response employeeToBeCreatedResponse =
-                given().
-                    spec(requestSpecification).
-                    params(newEmployeeData.toMap()).
-                when().
-                    post("/create");
+        NewEmployee employeeToBeCreated = postEmployee(newEmployeeData);
 
-        assertThat(employeeToBeCreatedResponse.statusCode()).as("check response status code").isEqualTo(200);
+        int newEmployeeId = employeeToBeCreated.getData().getId();
 
-        NewEmployee employeeToBeCreated = employeeToBeCreatedResponse.as(NewEmployee.class);
-
-        int id = employeeToBeCreated.getData().getId();
-
-        Response createdEmployeeResponse = getEmployeeByIdResponse(id);
-
-        assertThat(createdEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
-
-        Employee createdEmployee = createdEmployeeResponse.as(Employee.class);
+        Employee createdEmployee = getEmployee(newEmployeeId);
 
         assertThat(createdEmployee.getData()).as("check if new employee has not null data").isNotNull();
 
@@ -139,18 +106,41 @@ public class EmployeeTest {
         softly.assertAll();
     }
 
-    private Response getEmployeeByIdResponse(int id){
-        return given().
+    private Employee getEmployee(int id){
+        Response employeeByIdResponse =
+                given().
                     spec(requestSpecification).
                     pathParams("id",id).
                 when().
                     get("/employee/{id}");
+
+        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
+
+        return employeeByIdResponse.as(Employee.class);
     }
 
-    private Response getAllEmployeesResponse(){
-        return given().
+    private Employees getEmployees(){
+        Response employeesResponse =
+                given().
                     spec(requestSpecification).
                 when().
                     get("/employees");
+
+        assertThat(employeesResponse.statusCode()).as("check response status code").isEqualTo(200);
+
+        return employeesResponse.as(Employees.class);
+    }
+
+    private NewEmployee postEmployee(JSONObject newEmployeeData){
+        Response newEmployeeResponse =
+                given().
+                        spec(requestSpecification).
+                        params(newEmployeeData.toMap()).
+                when().
+                        post("/create");
+
+        assertThat(newEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
+
+        return newEmployeeResponse.as(NewEmployee.class);
     }
 }
