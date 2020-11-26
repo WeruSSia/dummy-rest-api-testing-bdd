@@ -1,3 +1,6 @@
+import dto.Employee;
+import dto.Employees;
+import dto.NewEmployee;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

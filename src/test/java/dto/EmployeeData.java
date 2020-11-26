@@ -1,3 +1,5 @@
+package dto;
+
 public class EmployeeData {
     private int id;
     private String employee_name;

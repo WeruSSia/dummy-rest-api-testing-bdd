@@ -1,3 +1,5 @@
+package dto;
+
 public class NewEmployee {
     private String status;
     private NewEmployeeData data;
