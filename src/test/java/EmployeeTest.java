@@ -36,7 +36,7 @@ public class EmployeeTest {
     public void checkGetEmployeesByIds(int id, String employeeName, int employeeSalary, int employeeAge, String profileImage) {
         Response employeeByIdResponse = getEmployeeByIdResponse(id);
 
-        assertThat(employeeByIdResponse.statusCode()).isEqualTo(200);
+        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employee employee = employeeByIdResponse.as(Employee.class);
 
@@ -53,7 +53,7 @@ public class EmployeeTest {
         int notExistingId = 25;
         Response employeeByIdResponse = getEmployeeByIdResponse(notExistingId);
 
-        assertThat(employeeByIdResponse.statusCode()).isEqualTo(200);
+        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employee employee = employeeByIdResponse.as(Employee.class);
 
@@ -68,7 +68,7 @@ public class EmployeeTest {
     public void checkForNegativeAgeValueOfEmployees() {
         Response allEmployeesResponse = getAllEmployeesResponse();
 
-        assertThat(allEmployeesResponse.statusCode()).isEqualTo(200);
+        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employees employees = allEmployeesResponse.as(Employees.class);
 
@@ -79,7 +79,7 @@ public class EmployeeTest {
     public void checkForNegativeSalaryValueOfEmployees() {
         Response allEmployeesResponse = getAllEmployeesResponse();
 
-        assertThat(allEmployeesResponse.statusCode()).isEqualTo(200);
+        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employees employees = allEmployeesResponse.as(Employees.class);
 
@@ -90,7 +90,7 @@ public class EmployeeTest {
     public void checkForDigitsInEmployeesNames() {
         Response allEmployeesResponse = getAllEmployeesResponse();
 
-        assertThat(allEmployeesResponse.statusCode()).isEqualTo(200);
+        assertThat(allEmployeesResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employees employees = allEmployeesResponse.as(Employees.class);
 
@@ -111,7 +111,7 @@ public class EmployeeTest {
                 when().
                     post("/create");
 
-        assertThat(employeeToBeCreatedResponse.statusCode()).isEqualTo(200);
+        assertThat(employeeToBeCreatedResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         NewEmployee employeeToBeCreated = employeeToBeCreatedResponse.as(NewEmployee.class);
 
@@ -119,11 +119,11 @@ public class EmployeeTest {
 
         Response createdEmployeeResponse = getEmployeeByIdResponse(id);
 
-        assertThat(createdEmployeeResponse.statusCode()).isEqualTo(200);
+        assertThat(createdEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         Employee createdEmployee = createdEmployeeResponse.as(Employee.class);
 
-        assertThat(createdEmployee.getData()).isNotNull();
+        assertThat(createdEmployee.getData()).as("check if new employee has not null data").isNotNull();
 
         SoftAssertions softly = new SoftAssertions();
             softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
