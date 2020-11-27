@@ -1,12 +1,17 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class EmployeeData {
     private int id;
-    private String employee_name;
-    private int employee_salary;
-    private int employee_age;
-    private String profile_image;
+    @JsonProperty("employee_name")
+    private String employeeName;
+    @JsonProperty("employee_salary")
+    private int employeeSalary;
+    @JsonProperty("employee_age")
+    private int employeeAge;
+    @JsonProperty("profile_image")
+    private String profileImage;
 }

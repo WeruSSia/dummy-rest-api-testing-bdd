@@ -41,10 +41,10 @@ public class EmployeeTest {
         Employee employee = getEmployee(id);
 
         SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(employee.getData().getEmployee_name()).isEqualTo(employeeName);
-            softly.assertThat(employee.getData().getEmployee_salary()).isEqualTo(employeeSalary);
-            softly.assertThat(employee.getData().getEmployee_age()).isEqualTo(employeeAge);
-            softly.assertThat(employee.getData().getProfile_image()).isEqualTo(profileImage);
+            softly.assertThat(employee.getData().getEmployeeName()).isEqualTo(employeeName);
+            softly.assertThat(employee.getData().getEmployeeSalary()).isEqualTo(employeeSalary);
+            softly.assertThat(employee.getData().getEmployeeAge()).isEqualTo(employeeAge);
+            softly.assertThat(employee.getData().getProfileImage()).isEqualTo(profileImage);
         softly.assertAll();
     }
 
@@ -78,9 +78,9 @@ public class EmployeeTest {
         SoftAssertions softly = new SoftAssertions();
             softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
             softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
-            softly.assertThat(createdEmployee.getData().getEmployee_name()).isEqualTo(employeeToBeCreated.getData().getName());
-            softly.assertThat(createdEmployee.getData().getEmployee_age()).isEqualTo(employeeToBeCreated.getData().getAge());
-            softly.assertThat(createdEmployee.getData().getEmployee_salary()).isEqualTo(employeeToBeCreated.getData().getSalary());
+            softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
+            softly.assertThat(createdEmployee.getData().getEmployeeAge()).isEqualTo(employeeToBeCreated.getData().getAge());
+            softly.assertThat(createdEmployee.getData().getEmployeeSalary()).isEqualTo(employeeToBeCreated.getData().getSalary());
         softly.assertAll();
     }
 
