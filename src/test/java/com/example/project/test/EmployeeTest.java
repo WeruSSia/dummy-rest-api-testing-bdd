@@ -38,7 +38,7 @@ public class EmployeeTest {
                         .id(1)
                         .employeeName("Tiger Nixon")
                         .employeeSalary(320800)
-                        .employeeAge(61)
+                        .employeeAge(62)
                         .profileImage(StringUtils.EMPTY)
                         .build()},
                 {EmployeeData.builder()
@@ -62,12 +62,7 @@ public class EmployeeTest {
     public void checkGetEmployeesByIds(EmployeeData employeeData) {
         val employee = getEmployee(employeeData.getId());
 
-        val softly = new SoftAssertions();
-        softly.assertThat(employee.getData().getEmployeeName()).isEqualTo(employeeData.getEmployeeName());
-        softly.assertThat(employee.getData().getEmployeeSalary()).isEqualTo(employeeData.getEmployeeSalary());
-        softly.assertThat(employee.getData().getEmployeeAge()).isEqualTo(employeeData.getEmployeeAge());
-        softly.assertThat(employee.getData().getProfileImage()).isEqualTo(employeeData.getProfileImage());
-        softly.assertAll();
+        assertThat(employee.getData()).isEqualTo(employeeData);
     }
 
     @Test
@@ -112,9 +107,9 @@ public class EmployeeTest {
                 given()
                         .spec(requestSpecification)
                         .pathParams("id", id)
-                .expect()
+                        .expect()
                         .spec(responseSpecification)
-                .when()
+                        .when()
                         .get("/employee/{id}");
 
         return employeeByIdResponse.as(Employee.class);
@@ -126,9 +121,9 @@ public class EmployeeTest {
                         .spec(requestSpecification)
                         .contentType("application/json")
                         .body(new Gson().toJson(newEmployeeData))
-                .expect()
+                        .expect()
                         .spec(responseSpecification)
-                .when()
+                        .when()
                         .post("/create");
 
         return newEmployeeResponse.as(NewEmployee.class);
