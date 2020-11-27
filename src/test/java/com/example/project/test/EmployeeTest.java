@@ -103,29 +103,25 @@ public class EmployeeTest {
     }
 
     private Employee getEmployee(int id) {
-        val employeeByIdResponse =
-                given()
-                        .spec(requestSpecification)
-                        .pathParams("id", id)
-                        .expect()
-                        .spec(responseSpecification)
-                        .when()
-                        .get("/employee/{id}");
-
-        return employeeByIdResponse.as(Employee.class);
+        return given()
+                    .spec(requestSpecification)
+                    .pathParams("id", id)
+                .expect()
+                    .spec(responseSpecification)
+                .when()
+                    .get("/employee/{id}")
+                .as(Employee.class);
     }
 
     private NewEmployee postEmployee(NewEmployeeData newEmployeeData) {
-        val newEmployeeResponse =
-                given()
-                        .spec(requestSpecification)
-                        .contentType("application/json")
-                        .body(new Gson().toJson(newEmployeeData))
-                        .expect()
-                        .spec(responseSpecification)
-                        .when()
-                        .post("/create");
-
-        return newEmployeeResponse.as(NewEmployee.class);
+        return given()
+                    .spec(requestSpecification)
+                    .contentType("application/json")
+                    .body(new Gson().toJson(newEmployeeData))
+                .expect()
+                    .spec(responseSpecification)
+                .when()
+                    .post("/create")
+                .as(NewEmployee.class);
     }
 }
