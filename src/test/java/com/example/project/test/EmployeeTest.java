@@ -3,7 +3,9 @@ package com.example.project.test;
 import com.google.gson.Gson;
 import com.example.project.dto.*;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.SoftAssertions;
@@ -17,11 +19,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EmployeeTest {
 
     private RequestSpecification requestSpecification;
+    private ResponseSpecification responseSpecification;
 
     @BeforeClass
-    public void createRequestSpecification() {
+    public void createRequestAndResponseSpecification() {
         requestSpecification = new RequestSpecBuilder()
                 .setBaseUri("http://dummy.restapiexample.com/api/v1")
+                .build();
+        responseSpecification = new ResponseSpecBuilder()
+                .expectStatusCode(200)
                 .build();
     }
 
@@ -106,10 +112,10 @@ public class EmployeeTest {
                 given()
                         .spec(requestSpecification)
                         .pathParams("id", id)
+                .expect()
+                        .spec(responseSpecification)
                 .when()
                         .get("/employee/{id}");
-
-        assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         return employeeByIdResponse.as(Employee.class);
     }
@@ -120,10 +126,10 @@ public class EmployeeTest {
                         .spec(requestSpecification)
                         .contentType("application/json")
                         .body(new Gson().toJson(newEmployeeData))
+                .expect()
+                        .spec(responseSpecification)
                 .when()
                         .post("/create");
-
-        assertThat(newEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         return newEmployeeResponse.as(NewEmployee.class);
     }
