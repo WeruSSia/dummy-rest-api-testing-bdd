@@ -5,6 +5,7 @@ import com.example.project.dto.*;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -32,21 +33,21 @@ public class EmployeeTest {
                         .employeeName("Tiger Nixon")
                         .employeeSalary(320800)
                         .employeeAge(61)
-                        .profileImage("")
+                        .profileImage(StringUtils.EMPTY)
                         .build()},
                 {EmployeeData.builder()
                         .id(2)
                         .employeeName("Garrett Winters")
                         .employeeSalary(170750)
                         .employeeAge(63)
-                        .profileImage("")
+                        .profileImage(StringUtils.EMPTY)
                         .build()},
                 {EmployeeData.builder()
                         .id(3)
                         .employeeName("Ashton Cox")
                         .employeeSalary(86000)
                         .employeeAge(66)
-                        .profileImage("")
+                        .profileImage(StringUtils.EMPTY)
                         .build()},
         };
     }
