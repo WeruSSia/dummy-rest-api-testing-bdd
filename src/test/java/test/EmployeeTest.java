@@ -26,31 +26,28 @@ public class EmployeeTest {
 
     @DataProvider(name = "existingEmployees")
     public Object[][] existingEmployees() {
-        EmployeeData employee1Data = EmployeeData.builder()
-                .id(1)
-                .employeeName("Tiger Nixon")
-                .employeeSalary(320800)
-                .employeeAge(61)
-                .profileImage("")
-                .build();
-        EmployeeData employee2Data = EmployeeData.builder()
-                .id(2)
-                .employeeName("Garrett Winters")
-                .employeeSalary(170750)
-                .employeeAge(63)
-                .profileImage("")
-                .build();
-        EmployeeData employee3Data = EmployeeData.builder()
-                .id(3)
-                .employeeName("Ashton Cox")
-                .employeeSalary(86000)
-                .employeeAge(66)
-                .profileImage("")
-                .build();
         return new Object[][]{
-                {employee1Data},
-                {employee2Data},
-                {employee3Data},
+                {EmployeeData.builder()
+                        .id(1)
+                        .employeeName("Tiger Nixon")
+                        .employeeSalary(320800)
+                        .employeeAge(61)
+                        .profileImage("")
+                        .build()},
+                {EmployeeData.builder()
+                        .id(2)
+                        .employeeName("Garrett Winters")
+                        .employeeSalary(170750)
+                        .employeeAge(63)
+                        .profileImage("")
+                        .build()},
+                {EmployeeData.builder()
+                        .id(3)
+                        .employeeName("Ashton Cox")
+                        .employeeSalary(86000)
+                        .employeeAge(66)
+                        .profileImage("")
+                        .build()},
         };
     }
 
