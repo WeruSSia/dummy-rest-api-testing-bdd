@@ -1,6 +1,7 @@
 package test;
 
 import dto.Employee;
+import dto.EmployeeData;
 import dto.NewEmployee;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
@@ -20,31 +21,50 @@ public class EmployeeTest {
 
     @BeforeClass
     public void createRequestSpecification() {
-        requestSpecification = new RequestSpecBuilder().
-                setBaseUri("http://dummy.restapiexample.com/api/v1").
-                build();
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri("http://dummy.restapiexample.com/api/v1")
+                .build();
     }
 
     @DataProvider(name = "existingEmployees")
     public Object[][] existingEmployees() {
+        EmployeeData employee1Data = EmployeeData.builder()
+                .id(1)
+                .employeeName("Tiger Nixon")
+                .employeeSalary(320800)
+                .employeeAge(61)
+                .profileImage("")
+                .build();
+        EmployeeData employee2Data = EmployeeData.builder()
+                .id(2)
+                .employeeName("Garrett Winters")
+                .employeeSalary(170750)
+                .employeeAge(63)
+                .profileImage("")
+                .build();
+        EmployeeData employee3Data = EmployeeData.builder()
+                .id(3)
+                .employeeName("Ashton Cox")
+                .employeeSalary(86000)
+                .employeeAge(66)
+                .profileImage("")
+                .build();
         return new Object[][]{
-                {1, "Tiger Nixon", 320800, 61, ""},
-                {2, "Garrett Winters", 170750, 63, ""},
-                {3, "Ashton Cox", 86000, 66, ""},
-                {4, "Cedric Kelly", 433060, 22, ""},
-                {5, "Airi Satou", 162700, 33, ""}
+                {employee1Data},
+                {employee2Data},
+                {employee3Data},
         };
     }
 
     @Test(dataProvider = "existingEmployees")
-    public void checkGetEmployeesByIds(int id, String employeeName, int employeeSalary, int employeeAge, String profileImage) {
-        Employee employee = getEmployee(id);
+    public void checkGetEmployeesByIds(EmployeeData employeeData) {
+        Employee employee = getEmployee(employeeData.getId());
 
         SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(employee.getData().getEmployeeName()).isEqualTo(employeeName);
-            softly.assertThat(employee.getData().getEmployeeSalary()).isEqualTo(employeeSalary);
-            softly.assertThat(employee.getData().getEmployeeAge()).isEqualTo(employeeAge);
-            softly.assertThat(employee.getData().getProfileImage()).isEqualTo(profileImage);
+        softly.assertThat(employee.getData().getEmployeeName()).isEqualTo(employeeData.getEmployeeName());
+        softly.assertThat(employee.getData().getEmployeeSalary()).isEqualTo(employeeData.getEmployeeSalary());
+        softly.assertThat(employee.getData().getEmployeeAge()).isEqualTo(employeeData.getEmployeeAge());
+        softly.assertThat(employee.getData().getProfileImage()).isEqualTo(employeeData.getProfileImage());
         softly.assertAll();
     }
 
@@ -54,18 +74,18 @@ public class EmployeeTest {
         Employee employee = getEmployee(notExistingId);
 
         SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(employee.getData()).isNull();
-            softly.assertThat(employee.getStatus()).isEqualTo("failure");
-            softly.assertThat(employee.getMessage()).isEqualTo("Failure! There is no such employee.");
+        softly.assertThat(employee.getData()).isNull();
+        softly.assertThat(employee.getStatus()).isEqualTo("failure");
+        softly.assertThat(employee.getMessage()).isEqualTo("Failure! There is no such employee.");
         softly.assertAll();
     }
 
     @Test
     public void testCreateNewEmployee() {
-        JSONObject newEmployeeData = new JSONObject().
-                put("name", "Adam").
-                put("salary", "5000").
-                put("age", "40");
+        JSONObject newEmployeeData = new JSONObject()
+                .put("name", "Adam")
+                .put("salary", "5000")
+                .put("age", "40");
 
         NewEmployee employeeToBeCreated = postEmployee(newEmployeeData);
 
@@ -76,34 +96,34 @@ public class EmployeeTest {
         assertThat(createdEmployee.getData()).as("check if new employee has not null data").isNotNull();
 
         SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
-            softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
-            softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
-            softly.assertThat(createdEmployee.getData().getEmployeeAge()).isEqualTo(employeeToBeCreated.getData().getAge());
-            softly.assertThat(createdEmployee.getData().getEmployeeSalary()).isEqualTo(employeeToBeCreated.getData().getSalary());
+        softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
+        softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
+        softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
+        softly.assertThat(createdEmployee.getData().getEmployeeAge()).isEqualTo(employeeToBeCreated.getData().getAge());
+        softly.assertThat(createdEmployee.getData().getEmployeeSalary()).isEqualTo(employeeToBeCreated.getData().getSalary());
         softly.assertAll();
     }
 
-    private Employee getEmployee(int id){
+    private Employee getEmployee(int id) {
         Response employeeByIdResponse =
-                given().
-                    spec(requestSpecification).
-                    pathParams("id",id).
-                when().
-                    get("/employee/{id}");
+                given()
+                        .spec(requestSpecification)
+                        .pathParams("id", id)
+                        .when()
+                        .get("/employee/{id}");
 
         assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
 
         return employeeByIdResponse.as(Employee.class);
     }
 
-    private NewEmployee postEmployee(JSONObject newEmployeeData){
+    private NewEmployee postEmployee(JSONObject newEmployeeData) {
         Response newEmployeeResponse =
-                given().
-                        spec(requestSpecification).
-                        params(newEmployeeData.toMap()).
-                when().
-                        post("/create");
+                given()
+                        .spec(requestSpecification)
+                        .params(newEmployeeData.toMap())
+                        .when()
+                        .post("/create");
 
         assertThat(newEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
 
