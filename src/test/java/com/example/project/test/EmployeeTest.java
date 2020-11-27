@@ -3,8 +3,8 @@ package com.example.project.test;
 import com.google.gson.Gson;
 import com.example.project.dto.*;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
@@ -54,9 +54,9 @@ public class EmployeeTest {
 
     @Test(dataProvider = "existingEmployees")
     public void checkGetEmployeesByIds(EmployeeData employeeData) {
-        Employee employee = getEmployee(employeeData.getId());
+        val employee = getEmployee(employeeData.getId());
 
-        SoftAssertions softly = new SoftAssertions();
+        val softly = new SoftAssertions();
         softly.assertThat(employee.getData().getEmployeeName()).isEqualTo(employeeData.getEmployeeName());
         softly.assertThat(employee.getData().getEmployeeSalary()).isEqualTo(employeeData.getEmployeeSalary());
         softly.assertThat(employee.getData().getEmployeeAge()).isEqualTo(employeeData.getEmployeeAge());
@@ -66,10 +66,10 @@ public class EmployeeTest {
 
     @Test
     public void checkForEmployeeWithNotExistingId() {
-        int notExistingId = 25;
-        Employee employee = getEmployee(notExistingId);
+        val notExistingId = 25;
+        val employee = getEmployee(notExistingId);
 
-        SoftAssertions softly = new SoftAssertions();
+        val softly = new SoftAssertions();
         softly.assertThat(employee.getData()).isNull();
         softly.assertThat(employee.getStatus()).isEqualTo("failure");
         softly.assertThat(employee.getMessage()).isEqualTo("Failure! There is no such employee.");
@@ -78,21 +78,21 @@ public class EmployeeTest {
 
     @Test
     public void testCreateNewEmployee() {
-        NewEmployeeData newEmployeeData = NewEmployeeData.builder()
+        val newEmployeeData = NewEmployeeData.builder()
                 .name("Adam")
                 .salary(5000)
                 .age(40)
                 .build();
 
-        NewEmployee employeeToBeCreated = postEmployee(newEmployeeData);
+        val employeeToBeCreated = postEmployee(newEmployeeData);
 
-        int newEmployeeId = employeeToBeCreated.getData().getId();
+        val newEmployeeId = employeeToBeCreated.getData().getId();
 
-        Employee createdEmployee = getEmployee(newEmployeeId);
+        val createdEmployee = getEmployee(newEmployeeId);
 
         assertThat(createdEmployee.getData()).as("check if new employee has not null data").isNotNull();
 
-        SoftAssertions softly = new SoftAssertions();
+        val softly = new SoftAssertions();
         softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
         softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
         softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
@@ -102,7 +102,7 @@ public class EmployeeTest {
     }
 
     private Employee getEmployee(int id) {
-        Response employeeByIdResponse =
+        val employeeByIdResponse =
                 given()
                         .spec(requestSpecification)
                         .pathParams("id", id)
@@ -115,7 +115,7 @@ public class EmployeeTest {
     }
 
     private NewEmployee postEmployee(NewEmployeeData newEmployeeData) {
-        Response newEmployeeResponse =
+        val newEmployeeResponse =
                 given()
                         .spec(requestSpecification)
                         .contentType("application/json")
