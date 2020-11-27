@@ -1,10 +1,7 @@
 package test;
 
 import com.google.gson.Gson;
-import dto.Employee;
-import dto.EmployeeData;
-import dto.NewEmployee;
-import dto.NewEmployeeData;
+import dto.*;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -111,7 +108,7 @@ public class EmployeeTest {
                 given()
                         .spec(requestSpecification)
                         .pathParams("id", id)
-                        .when()
+                .when()
                         .get("/employee/{id}");
 
         assertThat(employeeByIdResponse.statusCode()).as("check response status code").isEqualTo(200);
@@ -125,7 +122,7 @@ public class EmployeeTest {
                         .spec(requestSpecification)
                         .contentType("application/json")
                         .body(new Gson().toJson(newEmployeeData))
-                        .when()
+                .when()
                         .post("/create");
 
         assertThat(newEmployeeResponse.statusCode()).as("check response status code").isEqualTo(200);
