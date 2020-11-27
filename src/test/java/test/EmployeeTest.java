@@ -1,8 +1,10 @@
 package test;
 
+import com.google.gson.Gson;
 import dto.Employee;
 import dto.EmployeeData;
 import dto.NewEmployee;
+import dto.NewEmployeeData;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -10,7 +12,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import org.json.JSONObject;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,10 +83,11 @@ public class EmployeeTest {
 
     @Test
     public void testCreateNewEmployee() {
-        JSONObject newEmployeeData = new JSONObject()
-                .put("name", "Adam")
-                .put("salary", "5000")
-                .put("age", "40");
+        NewEmployeeData newEmployeeData = NewEmployeeData.builder()
+                .name("Adam")
+                .salary(5000)
+                .age(40)
+                .build();
 
         NewEmployee employeeToBeCreated = postEmployee(newEmployeeData);
 
@@ -117,11 +119,12 @@ public class EmployeeTest {
         return employeeByIdResponse.as(Employee.class);
     }
 
-    private NewEmployee postEmployee(JSONObject newEmployeeData) {
+    private NewEmployee postEmployee(NewEmployeeData newEmployeeData) {
         Response newEmployeeResponse =
                 given()
                         .spec(requestSpecification)
-                        .params(newEmployeeData.toMap())
+                        .contentType("application/json")
+                        .body(new Gson().toJson(newEmployeeData))
                         .when()
                         .post("/create");
 
