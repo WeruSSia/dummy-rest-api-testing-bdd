@@ -1,7 +1,7 @@
-package test;
+package com.example.project.test;
 
 import com.google.gson.Gson;
-import dto.*;
+import com.example.project.dto.*;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
