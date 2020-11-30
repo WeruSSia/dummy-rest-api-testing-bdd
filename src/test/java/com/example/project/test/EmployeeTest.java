@@ -94,7 +94,7 @@ public class EmployeeTest {
         assertThat(createdEmployee.getData()).as("check if new employee has not null data").isNotNull();
 
         val softly = new SoftAssertions();
-        softly.assertThat(employeeToBeCreated.getMessage()).isEqualTo("Successfully! Record has been added.");
+        softly.assertThat(createdEmployee.getMessage()).isEqualTo("Successfully! Record has been added.");
         softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
         softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
         softly.assertThat(createdEmployee.getData().getEmployeeAge()).isEqualTo(employeeToBeCreated.getData().getAge());
