@@ -20,6 +20,7 @@ public class EmployeeTest {
 
     private RequestSpecification requestSpecification;
     private ResponseSpecification responseSpecification;
+    private final Gson gson = new Gson();
 
     @BeforeClass
     public void createRequestAndResponseSpecification() {
@@ -117,7 +118,7 @@ public class EmployeeTest {
         return given()
                     .spec(requestSpecification)
                     .contentType("application/json")
-                    .body(new Gson().toJson(newEmployeeData))
+                    .body(gson.toJson(newEmployeeData))
                 .expect()
                     .spec(responseSpecification)
                 .when()
