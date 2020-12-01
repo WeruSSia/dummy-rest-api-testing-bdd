@@ -101,11 +101,15 @@ public class EmployeeTest {
 
         val softly = new SoftAssertions();
         softly.assertThat(createdEmployee.getMessage()).isEqualTo("Successfully! Record has been added.");
-        softly.assertThat(createdEmployee.getData().getId()).isEqualTo(employeeToBeCreated.getData().getId());
-        softly.assertThat(createdEmployee.getData().getEmployeeName()).isEqualTo(employeeToBeCreated.getData().getName());
-        softly.assertThat(createdEmployee.getData().getEmployeeAge()).isEqualTo(employeeToBeCreated.getData().getAge());
-        softly.assertThat(createdEmployee.getData().getEmployeeSalary()).isEqualTo(employeeToBeCreated.getData().getSalary());
+        softly.assertThat(areEmployeesEqual(createdEmployee,employeeToBeCreated)).isTrue();
         softly.assertAll();
+    }
+
+    private boolean areEmployeesEqual(Employee employee1, NewEmployee employee2){
+        return employee1.getData().getEmployeeName().equals(employee2.getData().getName())
+                && employee1.getData().getEmployeeAge() == employee2.getData().getAge()
+                && employee1.getData().getEmployeeSalary() == employee2.getData().getSalary()
+                && employee1.getData().getId() == employee2.getData().getId();
     }
 
     private Employee getEmployee(int id) {
