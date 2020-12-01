@@ -1,6 +1,7 @@
 package com.example.project.test;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.project.dto.*;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -23,7 +24,7 @@ public class EmployeeTest {
 
     private RequestSpecification requestSpecification;
     private ResponseSpecification responseSpecification;
-    private final Gson gson = new Gson();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeClass
     public void createRequestAndResponseSpecification() {
@@ -83,7 +84,7 @@ public class EmployeeTest {
     }
 
     @Test
-    public void testCreateNewEmployee() {
+    public void testCreateNewEmployee() throws JsonProcessingException {
         val newEmployeeData = NewEmployeeData.builder()
                 .name("Adam")
                 .salary(5000)
@@ -118,11 +119,11 @@ public class EmployeeTest {
                 .as(Employee.class);
     }
 
-    private NewEmployee postEmployee(NewEmployeeData newEmployeeData) {
+    private NewEmployee postEmployee(NewEmployeeData newEmployeeData) throws JsonProcessingException {
         return given()
                     .spec(requestSpecification)
                     .contentType("application/json")
-                    .body(gson.toJson(newEmployeeData))
+                    .body(objectMapper.writeValueAsString(newEmployeeData))
                 .expect()
                     .spec(responseSpecification)
                 .when()
