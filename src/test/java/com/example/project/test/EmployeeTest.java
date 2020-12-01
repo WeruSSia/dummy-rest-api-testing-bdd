@@ -2,8 +2,11 @@ package com.example.project.test;
 
 import com.google.gson.Gson;
 import com.example.project.dto.*;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import lombok.val;
@@ -30,6 +33,7 @@ public class EmployeeTest {
         responseSpecification = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .build();
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
     }
 
     @DataProvider(name = "existingEmployees")
