@@ -24,7 +24,11 @@ public class EmployeeTest {
 
     private RequestSpecification requestSpecification;
     private ResponseSpecification responseSpecification;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public EmployeeTest() {
+        objectMapper = new ObjectMapper();
+    }
 
     @BeforeClass
     public void createRequestAndResponseSpecification() {
