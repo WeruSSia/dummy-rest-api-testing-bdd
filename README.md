@@ -1,4 +1,4 @@
-# dummy-rest-api-testing
+# dummy-rest-api-testing-bdd
 
 * In order to run tests use:
 
