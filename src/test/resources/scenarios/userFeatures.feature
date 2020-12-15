@@ -14,10 +14,10 @@ Feature: Testing REST API
     Then response status should be 200
     And I should get employee with name <name>, salary <salary> and age <age>
     Examples:
-      | id |        name       | salary | age |
+      | id | name              | salary | age |
       | 1  | "Tiger Nixon"     | 320800 | 61  |
       | 2  | "Garrett Winters" | 170750 | 63  |
-      | 3  |    "Ashton Cox"   | 86000  | 66  |
+      | 3  | "Ashton Cox"      | 86000  | 66  |
 
   Scenario: I shouldn't be able to get employee with id 100
     Given the base page uri exists
