@@ -9,10 +9,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 import lombok.val;
 import org.assertj.core.api.SoftAssertions;
 
@@ -21,29 +20,28 @@ import static io.restassured.RestAssured.given;
 
 public class StepDefinitions {
     private Response response;
+    private RequestSpecification requestSpecification;
     private final ObjectMapper objectMapper;
 
     public StepDefinitions() {
         objectMapper = new ObjectMapper();
     }
 
-    @Given("the base page uri exists")
-    public void preReq() {
-        RestAssured.baseURI = "http://dummy.restapiexample.com/api/v1";
+    @Given("the request specification")
+    public void createRequestSpecification() {
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri("http://dummy.restapiexample.com/api/v1")
+                .build();
     }
 
-    @When("I send valid new employee data, with name {string}, salary {int} and age {int}")
+    @When("I post valid new employee data, with name {string}, salary {int} and age {int}")
     public void sendNewEmployeeData(String name, int salary, int age) throws JsonProcessingException {
         val newEmployeeData = NewEmployeeData.builder()
                 .name(name)
                 .salary(salary)
                 .age(age)
                 .build();
-        response = given()
-                .contentType("application/json")
-                .body(objectMapper.writeValueAsString(newEmployeeData))
-                .when()
-                .post("/create");
+        response = postEmployee(newEmployeeData);
     }
 
     @Then("response status should be {int}")
@@ -52,7 +50,7 @@ public class StepDefinitions {
     }
 
     @And("check if employee was created")
-    public void checkIfNewEmployeeWasCreated() {
+    public void checkIfEmployeeWasCreated() {
         val employeeToBeCreated = response.as(NewEmployee.class);
 
         val newEmployeeId = employeeToBeCreated.getData().getId();
@@ -102,8 +100,18 @@ public class StepDefinitions {
 
     private Response getEmployee(int id) {
         return given()
+                .spec(requestSpecification)
                 .pathParams("id", id)
                 .when()
                 .get("/employee/{id}");
+    }
+
+    private Response postEmployee(NewEmployeeData newEmployeeData) throws JsonProcessingException {
+        return given()
+                .spec(requestSpecification)
+                .contentType("application/json")
+                .body(objectMapper.writeValueAsString(newEmployeeData))
+                .when()
+                .post("/create");
     }
 }
