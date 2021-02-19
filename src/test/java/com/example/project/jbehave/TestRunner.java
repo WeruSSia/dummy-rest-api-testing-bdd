@@ -10,6 +10,7 @@ import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
@@ -34,7 +35,7 @@ public class TestRunner extends JUnitStories {
     @Override
     protected List<String> storyPaths() {
         StoryFinder finder = new StoryFinder();
-        return finder.findPaths(codeLocationFromClass(this.getClass()).getFile(), Arrays.asList("**/*.story"), Arrays.asList(""));
+        return finder.findPaths(codeLocationFromClass(this.getClass()).getFile(), Collections.singletonList("**/*.story"), Collections.singletonList(""));
     }
 
 }
